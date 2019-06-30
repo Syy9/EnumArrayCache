@@ -1,28 +1,17 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Syy.Logics
 {
-    public static class EnumArrayCache<T> where T : Enum
+    public static class EnumArrayCache
     {
-        static Dictionary<Type, T[]> _caches = new Dictionary<Type, T[]>();
-
-        public static T[] Get()
+        private static class EnumArray<T> where T : Enum
         {
-            var type = typeof(T);
-            T[] result = null;
-            if (_caches.TryGetValue(type, out result))
-            {
-                return result;
-            }
-
-            return _caches[type] = (T[])Enum.GetValues(type);
+            public readonly static T[] Cache = (T[])Enum.GetValues(typeof(T));
         }
 
-        public static void Clear()
+        public static T[] Get<T>() where T : Enum
         {
-            _caches.Clear();
+            return EnumArray<T>.Cache;
         }
     }
 }
